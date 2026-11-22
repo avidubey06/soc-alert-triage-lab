@@ -1,27 +1,30 @@
 # SOC Alert Triage Lab
 
-A Python lab for investigating repeated failed logins followed by a successful login. It runs offline on synthetic authentication events.
+Would three failed sign-ins followed by a success be enough to escalate? This small Python lab turns a synthetic authentication log into a timeline for that decision.
 
-## Run the lab
+## Case review
 
-Requires Python 3.10 or newer. No external packages are needed.
+| Time (UTC) | What the log shows |
+| --- | --- |
+| 09:00–09:02 | Three failed sign-ins for `alex` from `192.0.2.10` |
+| 09:04 | A successful sign-in for the same account and source |
+| 09:05–09:10 | Separate account `sam` fails once and then signs in successfully |
+
+**Decision:** Keep the alert open for review. The timing matches the rule, but the same sequence could come from password typos. The dataset has no MFA, device, or post-login events. In a real investigation, those records would help determine whether the successful sign-in was expected.
+
+## Reproduce the result
+
+Run with Python 3.10 or later. No packages or accounts are required.
 
 ```sh
 python triage.py events.csv
+python -m unittest -v
 ```
 
-The script groups events by account and source address. It reports a success preceded by at least three failures from that group within ten minutes. Each alert includes the timestamps of the matched failures and success.
+The sample produces one alert for `alex`, with the three failure timestamps and the success at 09:04 UTC. Five tests check the sample, the ten-minute boundary, expired failures, separate source addresses, and the reset after a successful sign-in.
 
-## Sample incident report
+## How the rule works
 
-| Time (UTC) | Evidence |
-| --- | --- |
-| 09:00–09:02 | Three failed sign-ins for `alex` from `192.0.2.10` |
-| 09:04 | Successful sign-in for the same account and source |
-| 09:05 | A separate account, `sam`, has one failed sign-in and does not meet the rule |
+The script orders events by timestamp and tracks failures per account and source. At a successful sign-in, it checks whether at least three failures occurred in the preceding ten minutes, including the boundary. The success clears that group's failure history. This approach can miss activity distributed across accounts or source addresses.
 
-**Disposition** — Investigate the sign-in. Mistyped passwords could explain the pattern. Confirm whether the activity was expected, review MFA and device details, and look for unusual activity after the successful sign-in before deciding whether to escalate.
-
-## Data and limitations
-
-Input columns are `timestamp`, `account`, `source`, and `outcome`. Timestamps must include a timezone and outcomes are `failure` or `success`. The sample CSV is fictional. The rule can miss activity spread across accounts or source addresses and does not have device or MFA context.
+The CSV uses fictional events. To try your own synthetic scenario, supply the columns `timestamp`, `account`, `source`, and `outcome`. Use timestamps with a timezone and either `failure` or `success` as the outcome.
