@@ -1,0 +1,61 @@
+[
+  {
+    "id": "login-review",
+    "severity": "high",
+    "claims": [
+      [
+        "login-1",
+        "failed_logins",
+        "4"
+      ],
+      [
+        "login-2",
+        "mfa_result",
+        "bypassed"
+      ]
+    ]
+  },
+  {
+    "id": "known-device",
+    "severity": "low",
+    "claims": [
+      [
+        "device-1",
+        "device",
+        "managed"
+      ],
+      [
+        "device-2",
+        "mfa_result",
+        "passed"
+      ]
+    ]
+  },
+  {
+    "id": "revoked-token",
+    "severity": "high",
+    "claims": [
+      [
+        "token-1",
+        "token_status",
+        "revoked"
+      ],
+      [
+        "token-2",
+        "request_result",
+        "accepted"
+      ]
+    ]
+  },
+  {
+    "id": "blocked-file",
+    "severity": "medium",
+    "claims": [
+      [
+        "file-1",
+        "file_action",
+        "quarantined"
+      ]
+    ]
+  }
+]
