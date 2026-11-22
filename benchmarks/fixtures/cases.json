@@ -1,0 +1,114 @@
+[
+  {
+    "id": "login-review",
+    "severity": "medium",
+    "evidence": [
+      [
+        "login-1",
+        "failed_logins",
+        "4"
+      ],
+      [
+        "login-2",
+        "mfa_result",
+        "unknown"
+      ]
+    ],
+    "required": [
+      [
+        "login-1",
+        "failed_logins",
+        "4"
+      ],
+      [
+        "login-2",
+        "mfa_result",
+        "unknown"
+      ]
+    ]
+  },
+  {
+    "id": "known-device",
+    "severity": "low",
+    "evidence": [
+      [
+        "device-1",
+        "device",
+        "managed"
+      ],
+      [
+        "device-2",
+        "mfa_result",
+        "passed"
+      ]
+    ],
+    "required": [
+      [
+        "device-1",
+        "device",
+        "managed"
+      ],
+      [
+        "device-2",
+        "mfa_result",
+        "passed"
+      ]
+    ]
+  },
+  {
+    "id": "revoked-token",
+    "severity": "high",
+    "evidence": [
+      [
+        "token-1",
+        "token_status",
+        "revoked"
+      ],
+      [
+        "token-2",
+        "request_result",
+        "accepted"
+      ]
+    ],
+    "required": [
+      [
+        "token-1",
+        "token_status",
+        "revoked"
+      ],
+      [
+        "token-2",
+        "request_result",
+        "accepted"
+      ]
+    ]
+  },
+  {
+    "id": "blocked-file",
+    "severity": "medium",
+    "evidence": [
+      [
+        "file-1",
+        "file_action",
+        "quarantined"
+      ],
+      [
+        "file-2",
+        "execution_status",
+        "unknown"
+      ]
+    ],
+    "required": [
+      [
+        "file-1",
+        "file_action",
+        "quarantined"
+      ],
+      [
+        "file-2",
+        "execution_status",
+        "unknown"
+      ]
+    ]
+  }
+]
