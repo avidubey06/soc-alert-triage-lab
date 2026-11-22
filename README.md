@@ -28,3 +28,8 @@ The sample produces one alert for `alex`, with the three failure timestamps and 
 The script orders events by timestamp and tracks failures per account and source. At a successful sign-in, it checks whether at least three failures occurred in the preceding ten minutes, including the boundary. The success clears that group's failure history. This approach can miss activity distributed across accounts or source addresses.
 
 The CSV uses fictional events. To try your own synthetic scenario, supply the columns `timestamp`, `account`, `source`, and `outcome`. Use timestamps with a timezone and either `failure` or `success` as the outcome.
+
+## Portfolio projects
+
+- [Detection engineering benchmark](benchmarks/README.md#detection-engineering-benchmark) compares threshold and window settings on 480 synthetic cases across tuning and holdout splits.
+- [AI triage output evaluation](benchmarks/README.md#ai-triage-output-evaluation) scores severity agreement and checks structured claims against case evidence.
