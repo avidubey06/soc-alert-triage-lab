@@ -34,3 +34,20 @@ python -m benchmarks.ai_evaluation benchmarks/fixtures/cases.json benchmarks/fix
 The flawed fixture claims MFA was bypassed even though the record says its result was unknown. It also omits execution status in the quarantined-file case. The report names each affected case and claim.
 
 To evaluate a model, give it only the case ID and evidence. Ask it to return an array with one object per case containing `id`, `severity` (low, medium, or high), and `claims`. Save the response as JSON and supply it as the second argument above. Keep the reference severity and required claims out of the model input. The published outputs are handwritten fixtures for exercising the evaluator. Exact matching is suitable for this structured format and does not assess free-text reasoning.
+
+## Account-wide rule experiment
+
+```sh
+python3 -m benchmarks.account_scope
+```
+
+The supplemental rule requires four failures across at least two sources on the same account within 20 minutes before a success. The combined evaluation deduplicates alerts by account and success timestamp and records which rules triggered.
+
+| Dataset | Rule | Precision | Recall | False positives | False negatives | Distributed cases found |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Original 240-case regression split | Tuned baseline | 78.3% | 60.0% | 20 | 48 | 0/40 |
+| Original 240-case regression split | Combined | 84.8% | 93.3% | 20 | 8 | 40/40 |
+| Four additional synthetic scenarios | Tuned baseline | 100% | 50% | 0 | 1 | 0/1 |
+| Four additional synthetic scenarios | Combined | 66.7% | 100% | 1 | 0 | 1/1 |
+
+In `distributed_recovery`, four failures arrive from four different sources before success. The account-wide rule joins them. In `benign_laptop_phone_retries`, four legitimate failures span two devices and the same rule triggers. Both event sequences and rule attribution appear in the [generated report](account-scope-report.json). The original holdout informed this design and is now a regression check. The four new scenarios are sanity checks and are too few to estimate production performance.
